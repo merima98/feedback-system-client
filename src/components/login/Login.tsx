@@ -1,21 +1,20 @@
 import {
+  Box,
   Button,
   Container,
   FormControl,
   TextField,
   LinearProgress,
 } from "@mui/material";
-
-import { Box } from "@mui/system";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 
-import { StyledErrorMessage, StyledLink } from "./RegisterStyle";
+import { StyledErrorMessage, StyledLink } from "./LoginStyle";
 import mutations from "../../api/mutations";
 import { useAuth } from "../../state";
 
-const Register = () => {
+const Login = () => {
   const {
     handleSubmit,
     register,
@@ -25,19 +24,19 @@ const Register = () => {
   const navigation = useNavigate();
   const setIsLoggedIn = useAuth((state) => state.setIsLoggedIn);
 
-  const registerMutation = useMutation(mutations.register, {
+  const loginMutation = useMutation(mutations.login, {
     onSuccess: (data) => {
       setIsLoggedIn(true, data.data.user.id, data.data.accessToken);
     },
     onError: (error) => {
       //will be updated
-      console.log("Data on error (register mutation) is, ", error);
+      console.log("Error from login mutation. ", error);
     },
   });
 
   function onSubmit(values: FieldValues) {
-    registerMutation.mutate(values);
-    navigation("/");
+    loginMutation.mutate(values);
+    navigation("/newest");
   }
 
   return (
@@ -54,43 +53,6 @@ const Register = () => {
             borderColor: "#e0e0e0",
           }}
         >
-          <FormControl sx={{ mb: 2 }}>
-            <TextField
-              label="First name"
-              size="small"
-              {...register("firstName", {
-                required: "First name is required field",
-                minLength: {
-                  value: 2,
-                  message: "First name must have at least two characters!",
-                },
-              })}
-            />
-            {errors.firstName && (
-              <StyledErrorMessage sx={{ fontSize: 12 }}>
-                {errors.firstName.message}{" "}
-              </StyledErrorMessage>
-            )}
-          </FormControl>
-          <FormControl sx={{ mb: 2 }}>
-            <TextField
-              label="Last name"
-              size="small"
-              {...register("lastName", {
-                required: "Last name is required field!",
-                minLength: {
-                  value: 2,
-                  message: "Last name must have at least two characters",
-                },
-              })}
-            />
-
-            {errors.lastName && (
-              <StyledErrorMessage sx={{ fontSize: 12 }}>
-                {errors.lastName.message}{" "}
-              </StyledErrorMessage>
-            )}
-          </FormControl>
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="Email"
@@ -127,21 +89,21 @@ const Register = () => {
             )}
           </FormControl>
           <Button size="small" type="submit">
-            Reigster
+            Login
           </Button>
           <Box sx={{ textAlign: "center", mb: 2 }}>
-            <Box component={"span"}>Already have an account? </Box>
+            <Box component={"span"}>Do not have an account? </Box>
             <Box component={"span"} sx={{ textDecoration: "none" }}>
-              <StyledLink to={"/login"}>Login.</StyledLink>
+              <StyledLink to={"/"}>Register.</StyledLink>
             </Box>
           </Box>
+
           <Box sx={{ width: "100%" }}>
-            {registerMutation.isLoading && <LinearProgress />}
+            {loginMutation.isLoading && <LinearProgress />}
           </Box>
         </Box>
       </form>
     </Container>
   );
 };
-
-export default Register;
+export default Login;

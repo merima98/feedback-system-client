@@ -3,7 +3,7 @@ import { FormLabel } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const StyledErrorMessage = styled(FormLabel)`
-  color: red !important;
+  color: red;
 `;
 
 const StyledLink = styled(Link)`
