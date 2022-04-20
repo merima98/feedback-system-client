@@ -1,6 +1,6 @@
 import { Button, Container, FormControl, TextField } from "@mui/material";
 import { Box } from "@mui/system";
-import { StyledErrorMessage } from "./FormFiled";
+import { StyledErrorMessage } from "./RegisterStyle";
 import { FieldValues, useForm } from "react-hook-form";
 
 const Register = () => {
