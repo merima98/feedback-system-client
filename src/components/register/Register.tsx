@@ -1,8 +1,11 @@
 import { Button, Container, FormControl, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { FieldValues, useForm } from "react-hook-form";
+import { useMutation } from "react-query";
 
 import { StyledErrorMessage, StyledLink } from "./RegisterStyle";
+import mutations from "../../api/mutations";
+import { useAuth } from "../../state";
 
 const Register = () => {
   const {
@@ -11,8 +14,20 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
+  const setIsLoggedIn = useAuth((state) => state.setIsLoggedIn);
+
+  const registerMutation = useMutation(mutations.register, {
+    onSuccess: (data) => {
+      setIsLoggedIn(true, data.data.user.id, data.data.accessToken);
+    },
+    onError: (error) => {
+      //will be updated
+      console.log("Data on error is, ", error);
+    },
+  });
+
   function onSubmit(values: FieldValues) {
-    console.log("Form data is, ", values);
+    registerMutation.mutate(values);
   }
 
   return (
