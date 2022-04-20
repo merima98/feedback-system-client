@@ -22,6 +22,10 @@ const LOGGED_IN_USER_ROUTES = [
     path: "/",
     element: FeedbackList,
   },
+  {
+    path: "/newest",
+    element: FeedbackList,
+  },
 ];
 
 export { NON_LOGGED_IN_USER_ROUTES, LOGGED_IN_USER_ROUTES };
