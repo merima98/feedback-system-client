@@ -26,10 +26,10 @@ const loggedUserPages = [
   { path: "/", content: "Feedback" },
   { path: "/newest", content: "The newest" },
 ];
-const settings = ["My profile", "Logout"];
 
 const Header = () => {
   const isLoggedIn = useAuth((state) => state.isLoggedIn);
+  const setLoggedOut = useAuth((state) => state.setLoggedOut);
   const navigation = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -53,6 +53,12 @@ const Header = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const logout = () => {
+    setAnchorElUser(null);
+    setLoggedOut(false);
+    navigation("/");
   };
 
   return (
@@ -154,11 +160,12 @@ const Header = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">My profile</Typography>
+                </MenuItem>
+                <MenuItem onClick={logout}>
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
               </Menu>
             </Box>
           </Toolbar>

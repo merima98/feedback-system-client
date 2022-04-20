@@ -1,6 +1,18 @@
-import { Box, Button, Container, FormControl, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  TextField,
+  LinearProgress,
+} from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
+
 import { StyledErrorMessage, StyledLink } from "./LoginStyle";
+import mutations from "../../api/mutations";
+import { useAuth } from "../../state";
 
 const Login = () => {
   const {
@@ -9,8 +21,22 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  const navigation = useNavigate();
+  const setIsLoggedIn = useAuth((state) => state.setIsLoggedIn);
+
+  const loginMutation = useMutation(mutations.login, {
+    onSuccess: (data) => {
+      setIsLoggedIn(true, data.data.user.id, data.data.accessToken);
+    },
+    onError: (error) => {
+      //will be updated
+      console.log("Error from login mutation. ", error);
+    },
+  });
+
   function onSubmit(values: FieldValues) {
-    console.log("Form data is, ", values);
+    loginMutation.mutate(values);
+    navigation("/newest");
   }
 
   return (
@@ -65,11 +91,15 @@ const Login = () => {
           <Button size="small" type="submit">
             Login
           </Button>
-          <Box sx={{ textAlign: "center" }}>
+          <Box sx={{ textAlign: "center", mb: 2 }}>
             <Box component={"span"}>Do not have an account? </Box>
             <Box component={"span"} sx={{ textDecoration: "none" }}>
               <StyledLink to={"/"}>Register.</StyledLink>
             </Box>
+          </Box>
+
+          <Box sx={{ width: "100%" }}>
+            {loginMutation.isLoading && <LinearProgress />}
           </Box>
         </Box>
       </form>

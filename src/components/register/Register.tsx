@@ -1,6 +1,14 @@
-import { Button, Container, FormControl, TextField } from "@mui/material";
+import {
+  Button,
+  Container,
+  FormControl,
+  TextField,
+  LinearProgress,
+} from "@mui/material";
+
 import { Box } from "@mui/system";
 import { FieldValues, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 
 import { StyledErrorMessage, StyledLink } from "./RegisterStyle";
@@ -14,6 +22,7 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
+  const navigation = useNavigate();
   const setIsLoggedIn = useAuth((state) => state.setIsLoggedIn);
 
   const registerMutation = useMutation(mutations.register, {
@@ -22,12 +31,13 @@ const Register = () => {
     },
     onError: (error) => {
       //will be updated
-      console.log("Data on error is, ", error);
+      console.log("Data on error (register mutation) is, ", error);
     },
   });
 
   function onSubmit(values: FieldValues) {
     registerMutation.mutate(values);
+    navigation("/");
   }
 
   return (
@@ -119,11 +129,14 @@ const Register = () => {
           <Button size="small" type="submit">
             Reigster
           </Button>
-          <Box sx={{ textAlign: "center" }}>
+          <Box sx={{ textAlign: "center", mb: 2 }}>
             <Box component={"span"}>Already have an account? </Box>
             <Box component={"span"} sx={{ textDecoration: "none" }}>
               <StyledLink to={"/login"}>Login.</StyledLink>
             </Box>
+          </Box>
+          <Box sx={{ width: "100%" }}>
+            {registerMutation.isLoading && <LinearProgress />}
           </Box>
         </Box>
       </form>
