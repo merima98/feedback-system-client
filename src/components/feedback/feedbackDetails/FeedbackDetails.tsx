@@ -3,8 +3,11 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 
 import queries from "../../../api/queries";
+import NewFeedbackForm from "../newFeedbackForm/NewFeedbackForm";
 
 const FeedbackDetails = () => {
+  const reporterId = window.localStorage.getItem("userId");
+
   const params = useParams();
   const { data } = useQuery("single-feedback", () =>
     queries.getUserById(Number(params.id))
@@ -15,12 +18,18 @@ const FeedbackDetails = () => {
       maxWidth={"sm"}
       sx={{
         mt: 2,
-        p: 5,
-        border: "1px solid",
-        borderColor: "#e0e0e0",
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          p: 5,
+          border: "1px solid",
+          borderColor: "#e0e0e0",
+          mb: 2,
+        }}
+      >
         <Box
           component={"span"}
           sx={{
@@ -37,9 +46,13 @@ const FeedbackDetails = () => {
         </Box>
 
         <Box component={"span"} sx={{ fontSize: 15 }}>
-          Role: {data?.data.feedbacks.length}
+          Number of feedbacks: {data?.data.feedbacks.length}
         </Box>
       </Box>
+      <NewFeedbackForm
+        userId={Number(params.id)}
+        reporterId={Number(reporterId)}
+      />
     </Container>
   );
 };

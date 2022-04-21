@@ -139,7 +139,6 @@ const Register = () => {
               </StyledErrorMessage>
             )}
           </FormControl>
-
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="Your role"
