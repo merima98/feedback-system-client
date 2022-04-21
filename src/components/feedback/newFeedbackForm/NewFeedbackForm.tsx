@@ -1,9 +1,18 @@
-import { Box, Button, FormControl, TextField } from "@mui/material";
+import { Box, Button, FormControl, TextField, Snackbar } from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
+import { forwardRef, useState } from "react";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 import { StyledErrorMessage } from "./NewFeedbackFormStyle";
 import mutations from "../../../api/mutations";
+
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const NewFeedbackForm = (props: { reporterId: number; userId: number }) => {
   const {
@@ -12,12 +21,20 @@ const NewFeedbackForm = (props: { reporterId: number; userId: number }) => {
     formState: { errors },
   } = useForm();
 
+  const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const handleOnClose = () => {
+    setOpen(false);
+  };
+
   const newFeedbackMutation = useMutation(mutations.addNewFeedback, {
     onSuccess: (data) => {
-      console.log("This is data on success, ", data);
+      setOpen(true);
+      queryClient.invalidateQueries("single-feedback");
     },
     onError: (data) => {
-      console.log("This is data on error ", data);
+      setOpen(false);
     },
   });
 
@@ -33,7 +50,7 @@ const NewFeedbackForm = (props: { reporterId: number; userId: number }) => {
   }
 
   return (
-    <Box>
+    <Box sx={{ mb: 2 }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <FormControl>
@@ -58,6 +75,17 @@ const NewFeedbackForm = (props: { reporterId: number; userId: number }) => {
           <Button type="submit">Leave a feedback</Button>
         </Box>
       </form>
+      <>
+        <Snackbar open={open} autoHideDuration={4000} onClose={handleOnClose}>
+          <Alert
+            onClose={handleOnClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            You've added feedback.
+          </Alert>
+        </Snackbar>
+      </>
     </Box>
   );
 };

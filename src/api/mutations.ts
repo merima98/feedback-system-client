@@ -16,7 +16,6 @@ function addNewFeedback(newFeedbackData: {
   updatedAt: Date;
   createdAt: Date;
 }) {
-  console.log("Values from mutation is, ", newFeedbackData);
   return axios.post("/feedbacks", newFeedbackData);
 }
 

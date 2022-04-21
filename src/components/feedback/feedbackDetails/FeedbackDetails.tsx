@@ -4,6 +4,8 @@ import { useQuery } from "react-query";
 
 import queries from "../../../api/queries";
 import NewFeedbackForm from "../newFeedbackForm/NewFeedbackForm";
+import { Feedback } from "../../../model/feedback";
+import SingleFeedbackComment from "../singleFeedback/SingleFeedbackComment";
 
 const FeedbackDetails = () => {
   const reporterId = window.localStorage.getItem("userId");
@@ -53,6 +55,21 @@ const FeedbackDetails = () => {
         userId={Number(params.id)}
         reporterId={Number(reporterId)}
       />
+      <div>
+        {data?.data.feedbacks?.map((feedback: Feedback) => {
+          return (
+            <SingleFeedbackComment
+              key={feedback.id}
+              content={feedback.content}
+              createdAt={feedback.createdAt}
+              id={feedback.id}
+              reporterId={feedback.reporterId}
+              updatedAt={feedback.updatedAt}
+              userId={feedback.userId}
+            />
+          );
+        })}
+      </div>
     </Container>
   );
 };
