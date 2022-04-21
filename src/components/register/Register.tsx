@@ -4,41 +4,54 @@ import {
   FormControl,
   TextField,
   LinearProgress,
+  Snackbar,
 } from "@mui/material";
-
 import { Box } from "@mui/system";
-import { FieldValues, useForm } from "react-hook-form";
+import { ErrorOption, FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import { forwardRef, useState } from "react";
 
 import { StyledErrorMessage, StyledLink } from "./RegisterStyle";
 import mutations from "../../api/mutations";
 import { useAuth } from "../../state";
 
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alet(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const Register = () => {
   const {
     handleSubmit,
+    setError,
     register,
     formState: { errors },
   } = useForm();
 
   const navigation = useNavigate();
   const setIsLoggedIn = useAuth((state) => state.setIsLoggedIn);
+  const [open, setOpen] = useState(false);
 
   const registerMutation = useMutation(mutations.register, {
     onSuccess: (data) => {
+      setOpen(false);
       setIsLoggedIn(true, data.data.user.id, data.data.accessToken);
+      navigation("/");
     },
-    onError: (error) => {
-      //will be updated
-      console.log("Data on error (register mutation) is, ", error);
+    onError: (error: ErrorOption) => {
+      setError("email", error, { shouldFocus: true });
+      setOpen(true);
     },
   });
 
   function onSubmit(values: FieldValues) {
     registerMutation.mutate(values);
-    navigation("/");
   }
+
+  const handleOnClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Container maxWidth="sm">
@@ -139,6 +152,17 @@ const Register = () => {
             {registerMutation.isLoading && <LinearProgress />}
           </Box>
         </Box>
+        <>
+          <Snackbar open={open} autoHideDuration={4000} onClose={handleOnClose}>
+            <Alert
+              onClose={handleOnClose}
+              severity="error"
+              sx={{ width: "100%" }}
+            >
+              Email or password are not correct!
+            </Alert>
+          </Snackbar>
+        </>
       </form>
     </Container>
   );

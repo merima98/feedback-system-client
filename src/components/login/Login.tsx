@@ -5,39 +5,56 @@ import {
   FormControl,
   TextField,
   LinearProgress,
+  Snackbar,
 } from "@mui/material";
-import { FieldValues, useForm } from "react-hook-form";
+import { ErrorOption, FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import { forwardRef, useState } from "react";
 
 import { StyledErrorMessage, StyledLink } from "./LoginStyle";
 import mutations from "../../api/mutations";
 import { useAuth } from "../../state";
 
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const Login = () => {
   const {
     handleSubmit,
     register,
+    setError,
     formState: { errors },
   } = useForm();
 
   const navigation = useNavigate();
   const setIsLoggedIn = useAuth((state) => state.setIsLoggedIn);
+  const [open, setOpen] = useState(false);
 
   const loginMutation = useMutation(mutations.login, {
     onSuccess: (data) => {
+      setOpen(false);
       setIsLoggedIn(true, data.data.user.id, data.data.accessToken);
+      navigation("/newest");
     },
-    onError: (error) => {
-      //will be updated
-      console.log("Error from login mutation. ", error);
+    onError: (error: ErrorOption) => {
+      setError("email", error, { shouldFocus: true });
+      setOpen(true);
     },
   });
 
   function onSubmit(values: FieldValues) {
     loginMutation.mutate(values);
-    navigation("/newest");
   }
+
+  const handleOnClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Container maxWidth="sm">
@@ -102,6 +119,17 @@ const Login = () => {
             {loginMutation.isLoading && <LinearProgress />}
           </Box>
         </Box>
+        <>
+          <Snackbar open={open} autoHideDuration={4000} onClose={handleOnClose}>
+            <Alert
+              onClose={handleOnClose}
+              severity="error"
+              sx={{ width: "100%" }}
+            >
+              Email or password are not correct!
+            </Alert>
+          </Snackbar>
+        </>
       </form>
     </Container>
   );
