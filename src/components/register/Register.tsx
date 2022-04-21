@@ -139,6 +139,26 @@ const Register = () => {
               </StyledErrorMessage>
             )}
           </FormControl>
+
+          <FormControl sx={{ mb: 2 }}>
+            <TextField
+              label="Your role"
+              size="medium"
+              autoComplete="role"
+              {...register("role", {
+                required: "Role is required field!",
+                minLength: {
+                  value: 4,
+                  message: "Role must have at least four characters!",
+                },
+              })}
+            />
+            {errors.role && (
+              <StyledErrorMessage sx={{ fontSize: 12 }}>
+                {errors.role.message}{" "}
+              </StyledErrorMessage>
+            )}
+          </FormControl>
           <Button size="small" type="submit">
             Reigster
           </Button>

@@ -2,24 +2,25 @@ import { Container } from "@mui/material";
 import { useQuery } from "react-query";
 
 import queries from "../../../api/queries";
-import { Feedback } from "../../../model/feedback";
+import { User } from "../../../model/user";
 import SingleFeedback from "../singleFeedback/SingleFeedback";
 
 const FeedbackList = () => {
-  const { data } = useQuery("feedback-list", () => queries.getAllFeedback());
+  const { data } = useQuery("feedback-list", () => queries.getAllUsers());
 
   return (
-    <Container maxWidth={"sm"}>
-      {data?.data.map((feedback: Feedback) => {
+    <Container maxWidth={"sm"} sx={{ mt: 2 }}>
+      {data?.data.map((user: User) => {
         return (
           <SingleFeedback
-            key={feedback.id}
-            id={feedback.id}
-            content={feedback.content}
-            createdAt={feedback.createdAt}
-            updatedAt={feedback.updatedAt}
-            userId={feedback.userId}
-            reporterId={feedback.reporterId}
+            key={user.id}
+            id={user.id}
+            email={user.email}
+            feedbacks={user.feedbacks}
+            firstName={user.firstName}
+            lastName={user.lastName}
+            password={user.password}
+            role={user.role}
           />
         );
       })}
