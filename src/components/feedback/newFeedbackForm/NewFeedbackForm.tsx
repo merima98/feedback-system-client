@@ -60,7 +60,7 @@ const NewFeedbackForm = (props: { reporterId: number; userId: number }) => {
                 required: "Feedback is required!",
                 minLength: {
                   value: 4,
-                  message: "Feetback must have at least gour characters.",
+                  message: "Feedback must have at least four characters.",
                 },
               })}
               placeholder="Write feedback here..."

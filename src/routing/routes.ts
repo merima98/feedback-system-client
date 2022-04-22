@@ -3,6 +3,7 @@ import FeedbackList from "../components/feedback/feedbackList/FeedbackList";
 import SingleFeedbackCommentDetails from "../components/feedback/singleFeedback/SingleFeedbackCommentDetails";
 import Login from "../components/login/Login";
 import Register from "../components/register/Register";
+import SingleUser from "../components/user/SingleUser";
 
 const NON_LOGGED_IN_USER_ROUTES = [
   {
@@ -43,6 +44,10 @@ const LOGGED_IN_USER_ROUTES = [
   {
     path: "/feedback-details/:id",
     element: SingleFeedbackCommentDetails,
+  },
+  {
+    path: "/my-profile",
+    element: SingleUser,
   },
 ];
 
