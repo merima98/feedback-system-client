@@ -36,11 +36,25 @@ function updateFeedback(data: any) {
   );
 }
 
+function updateUserProfile(data: any) {
+  return axios.put(
+    `/users/${data.id}`,
+    (data = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      role: data.role,
+      email: data.email,
+      password: data.password,
+    })
+  );
+}
+
 const exports = {
   register,
   login,
   addNewFeedback,
   deleteFeedback,
+  updateUserProfile,
   updateFeedback,
 };
 
