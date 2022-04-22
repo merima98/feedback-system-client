@@ -19,10 +19,15 @@ function addNewFeedback(newFeedbackData: {
   return axios.post("/feedbacks", newFeedbackData);
 }
 
+function deleteFeedback(feedbackId: number) {
+  return axios.delete(`/feedbacks/${feedbackId}`);
+}
+
 const exports = {
   register,
   login,
   addNewFeedback,
+  deleteFeedback,
 };
 
 export default exports;

@@ -1,12 +1,58 @@
-import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
-import { Box, Button, Container } from "@mui/material";
+import { useQuery, useMutation } from "react-query";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Snackbar,
+  DialogTitle,
+  Slide,
+} from "@mui/material";
+
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+import { TransitionProps } from "@mui/material/transitions";
+import { forwardRef, useState } from "react";
 
 import queries from "../../../api/queries";
+import mutation from "../../../api/mutations";
 import { format } from "date-fns";
 
+const Transition = forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const SingleFeedbackCommentDetails = () => {
+  const navigation = useNavigate();
   const params = useParams();
+  const userId = window.localStorage.getItem("userId");
+
+  const [open, setOpen] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const { data } = useQuery("feedback-details", () =>
     queries.getSingleFeedback(Number(params.id))
@@ -18,6 +64,25 @@ const SingleFeedbackCommentDetails = () => {
       let value = format(dateParse, "dd.MM.yyyy");
       return value;
     }
+  }
+
+  const deleteFeedbackMutation = useMutation(mutation.deleteFeedback, {
+    onSuccess: (data) => {
+      setOpenAlert(true);
+      navigation(`/newest`);
+    },
+    onError: (data) => {
+      setOpenAlert(false);
+    },
+  });
+
+  function deleteFeedback() {
+    deleteFeedbackMutation.mutate(Number(data?.data.id));
+    setOpen(false);
+  }
+
+  function handleOnCloseAlert() {
+    setOpenAlert(false);
   }
 
   return (
@@ -50,19 +115,59 @@ const SingleFeedbackCommentDetails = () => {
           Last modified at: {convertDate(data?.data.updatedAt)}
         </Box>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Button variant="contained" size="small">
-          Edit
-        </Button>
-        <Button size="small" color="error" variant="contained">
-          Delete
-        </Button>
-      </Box>
+      {Number(userId) === Number(data?.data.reporterId) && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button variant="contained" size="small">
+            Edit
+          </Button>
+          <Button
+            size="small"
+            color="error"
+            variant="contained"
+            onClick={handleClickOpen}
+          >
+            Delete
+          </Button>
+          <Dialog
+            open={open}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={handleClose}
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle>{"Delete feedback?"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-slide-description">
+                Are you sure that you want to delete this feedback?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button onClick={deleteFeedback}>Delete</Button>
+            </DialogActions>
+          </Dialog>
+          <>
+            <Snackbar
+              open={openAlert}
+              autoHideDuration={4000}
+              onClose={handleOnCloseAlert}
+            >
+              <Alert
+                onClose={handleOnCloseAlert}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                You've deleted feedback!
+              </Alert>
+            </Snackbar>
+          </>
+        </Box>
+      )}
     </Container>
   );
 };
