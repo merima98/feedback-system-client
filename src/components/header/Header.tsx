@@ -13,7 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
 import { User } from "react-feather";
 
-import { StyledLink } from "./HeaderStyles";
+import { StyledLink, StyledMyProfileLink } from "./HeaderStyles";
 import { useAuth } from "../../state";
 
 const nonLoggedUserPages = [
@@ -161,7 +161,9 @@ const Header = () => {
                 onClose={handleCloseUserMenu}
               >
                 <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">My profile</Typography>
+                  <StyledMyProfileLink to={"/my-profile"}>
+                    My profile
+                  </StyledMyProfileLink>
                 </MenuItem>
                 <MenuItem onClick={logout}>
                   <Typography textAlign="center">Logout</Typography>

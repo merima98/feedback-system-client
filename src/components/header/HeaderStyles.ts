@@ -6,4 +6,9 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-export { StyledLink };
+const StyledMyProfileLink = styled(Link)`
+  color: #000;
+  text-decoration: none;
+`;
+
+export { StyledLink, StyledMyProfileLink };
