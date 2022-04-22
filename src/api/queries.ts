@@ -12,10 +12,15 @@ function getAllUsers() {
   return axios.get("/users?_embed=feedbacks");
 }
 
+function getSingleFeedback(feedbackId: number) {
+  return axios.get(`/feedbacks/${feedbackId}`);
+}
+
 const exports = {
   getAllFeedback,
   getUserById,
   getAllUsers,
+  getSingleFeedback,
 };
 
 export default exports;
