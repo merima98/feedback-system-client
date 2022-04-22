@@ -23,11 +23,25 @@ function deleteFeedback(feedbackId: number) {
   return axios.delete(`/feedbacks/${feedbackId}`);
 }
 
+function updateFeedback(data: any) {
+  return axios.put(
+    `/feedbacks/${data.id}`,
+    (data = {
+      userId: data.userId,
+      reporterId: data.reporterId,
+      content: data.content,
+      updatedAt: data.updatedAt,
+      createdAt: data.createdAt,
+    })
+  );
+}
+
 const exports = {
   register,
   login,
   addNewFeedback,
   deleteFeedback,
+  updateFeedback,
 };
 
 export default exports;

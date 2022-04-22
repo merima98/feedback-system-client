@@ -1,5 +1,6 @@
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useParams, useNavigate } from "react-router-dom";
+import { FieldValues, useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -10,17 +11,21 @@ import {
   DialogContentText,
   Snackbar,
   DialogTitle,
+  SwipeableDrawer,
   Slide,
+  FormControl,
+  TextField,
 } from "@mui/material";
 
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 import { TransitionProps } from "@mui/material/transitions";
-import { forwardRef, useState } from "react";
+import { forwardRef, useState, Fragment } from "react";
 
 import queries from "../../../api/queries";
 import mutation from "../../../api/mutations";
 import { format } from "date-fns";
+import { StyledErrorMessage } from "./SingleFeedbackStyle";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -39,7 +44,101 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 const SingleFeedbackCommentDetails = () => {
+  const [drawerOpen, setDrawerOpen] = useState({
+    right: false,
+  });
+
+  const queryClient = useQueryClient();
+
+  const toggleDrawer =
+    (anchor: string, open: boolean) =>
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (event && (event as React.KeyboardEvent).key === "Shift") {
+        return;
+      }
+
+      setDrawerOpen({ ...drawerOpen, [anchor]: open });
+    };
+
+  function onSubmit(values: FieldValues) {
+    const updateFeedbackData = {
+      userId: Number(data?.data.userId),
+      reporterId: Number(data?.data.reporterId),
+      content: values.content,
+      updatedAt: new Date(),
+      createdAt: data?.data.createdAt,
+      id: data?.data.id,
+    };
+    updateFeedback.mutate(updateFeedbackData);
+    setDrawerOpen({ ...drawerOpen, right: false });
+  }
+
+  const updateFeedback = useMutation(mutation.updateFeedback, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("feedback-details");
+    },
+  });
+  const list = () => (
+    <Box
+      role="presentation"
+      sx={{
+        p: 5,
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Box
+            component={"span"}
+            sx={{
+              fontSize: 12,
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              mb: 2,
+            }}
+          >
+            Update your feedback
+          </Box>
+          <FormControl>
+            <TextField
+              sx={{
+                mb: 2,
+              }}
+              placeholder="Write feedback here..."
+              size="medium"
+              {...register("content", {
+                required: "Feedback is required field!",
+                minLength: {
+                  value: 4,
+                  message: "Feedback must have at least four characters.",
+                },
+              })}
+            />
+            {errors.content && (
+              <StyledErrorMessage sx={{ fontSize: 12, mb: 2 }}>
+                {errors.content.message}
+              </StyledErrorMessage>
+            )}
+          </FormControl>
+          <Button type="submit" variant="contained">
+            Update feedback.
+          </Button>
+        </Box>
+      </form>
+    </Box>
+  );
+
   const navigation = useNavigate();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm();
+
   const params = useParams();
   const userId = window.localStorage.getItem("userId");
 
@@ -69,7 +168,7 @@ const SingleFeedbackCommentDetails = () => {
   const deleteFeedbackMutation = useMutation(mutation.deleteFeedback, {
     onSuccess: (data) => {
       setOpenAlert(true);
-      navigation(`/newest`);
+      setTimeout(() => navigation("/newest"), 1000);
     },
     onError: (data) => {
       setOpenAlert(false);
@@ -79,6 +178,7 @@ const SingleFeedbackCommentDetails = () => {
   function deleteFeedback() {
     deleteFeedbackMutation.mutate(Number(data?.data.id));
     setOpen(false);
+    setOpenAlert(true);
   }
 
   function handleOnCloseAlert() {
@@ -122,9 +222,19 @@ const SingleFeedbackCommentDetails = () => {
             justifyContent: "space-between",
           }}
         >
-          <Button variant="contained" size="small">
-            Edit
-          </Button>
+          <Fragment key={"right"}>
+            <Button variant="contained" onClick={toggleDrawer("right", true)}>
+              Edit
+            </Button>
+            <SwipeableDrawer
+              anchor="right"
+              open={drawerOpen["right"]}
+              onClose={toggleDrawer("right", false)}
+              onOpen={toggleDrawer("right", true)}
+            >
+              {list()}
+            </SwipeableDrawer>
+          </Fragment>
           <Button
             size="small"
             color="error"
