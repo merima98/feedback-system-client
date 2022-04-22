@@ -55,7 +55,7 @@ const FeedbackDetails = () => {
         userId={Number(params.id)}
         reporterId={Number(reporterId)}
       />
-      <div>
+      <Box sx={{ cursor: "pointer" }}>
         {data?.data.feedbacks?.map((feedback: Feedback) => {
           return (
             <SingleFeedbackComment
@@ -69,7 +69,7 @@ const FeedbackDetails = () => {
             />
           );
         })}
-      </div>
+      </Box>
     </Container>
   );
 };
