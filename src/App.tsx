@@ -23,7 +23,14 @@ function App() {
   const queryClient = new QueryClient();
   return (
     <ThemeProvider theme={theme}>
-      <Paper style={{ height: "100vh" }}>
+      <Paper
+        style={{
+          height: "auto",
+          boxShadow: "none",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <Header />
