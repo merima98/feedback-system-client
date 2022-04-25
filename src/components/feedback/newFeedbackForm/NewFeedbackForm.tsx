@@ -1,4 +1,10 @@
-import { Box, Button, FormControl, TextField, Snackbar } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  Snackbar,
+  TextareaAutosize,
+} from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import { forwardRef, useState } from "react";
@@ -18,6 +24,7 @@ const NewFeedbackForm = (props: { reporterId: number; userId: number }) => {
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -31,6 +38,7 @@ const NewFeedbackForm = (props: { reporterId: number; userId: number }) => {
   const newFeedbackMutation = useMutation(mutations.addNewFeedback, {
     onSuccess: (data) => {
       setOpen(true);
+      reset();
       queryClient.invalidateQueries("single-feedback");
     },
     onError: (data) => {
@@ -54,8 +62,14 @@ const NewFeedbackForm = (props: { reporterId: number; userId: number }) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <FormControl>
-            <TextField
-              sx={{ mb: 2 }}
+            <TextareaAutosize
+              style={{
+                marginBottom: "1rem",
+                padding: "1rem",
+                resize: "none",
+
+                fontFamily: "sans-serif",
+              }}
               {...register("content", {
                 required: "Feedback is required!",
                 minLength: {
@@ -64,7 +78,6 @@ const NewFeedbackForm = (props: { reporterId: number; userId: number }) => {
                 },
               })}
               placeholder="Write feedback here..."
-              size="medium"
             />
             {errors.content && (
               <StyledErrorMessage sx={{ fontSize: 12, mb: 2 }}>
