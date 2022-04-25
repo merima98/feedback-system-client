@@ -89,6 +89,7 @@ const SingleUser = () => {
               }}
               label="First name"
               size="small"
+              defaultValue={data?.data.firstName}
               {...register("firstName", {
                 required: "First name is required field",
                 minLength: {
@@ -103,6 +104,7 @@ const SingleUser = () => {
           </FormControl>
           <FormControl sx={{ mb: 2 }}>
             <TextField
+              defaultValue={data?.data.lastName}
               label="Last name"
               size="small"
               {...register("lastName", {
@@ -124,6 +126,7 @@ const SingleUser = () => {
             <TextField
               label="Your role"
               size="medium"
+              defaultValue={data?.data.role}
               autoComplete="role"
               {...register("role", {
                 required: "Role is required field!",
@@ -197,8 +200,12 @@ const SingleUser = () => {
       </Box>
       <Box>
         <Fragment key={"right"}>
-          <Button variant="contained" onClick={toggleDrawer("right", true)}>
-            Edit your profile
+          <Button
+            variant="contained"
+            size="small"
+            onClick={toggleDrawer("right", true)}
+          >
+            Edit profile
           </Button>
           <SwipeableDrawer
             anchor="right"

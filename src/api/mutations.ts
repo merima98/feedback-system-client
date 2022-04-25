@@ -23,7 +23,14 @@ function deleteFeedback(feedbackId: number) {
   return axios.delete(`/feedbacks/${feedbackId}`);
 }
 
-function updateFeedback(data: any) {
+function updateFeedback(data: {
+  id: number;
+  userId: number;
+  reporterId: number;
+  content: string;
+  updatedAt: Date;
+  createdAt: string;
+}) {
   return axios.put(
     `/feedbacks/${data.id}`,
     (data = {
@@ -32,11 +39,19 @@ function updateFeedback(data: any) {
       content: data.content,
       updatedAt: data.updatedAt,
       createdAt: data.createdAt,
+      id: data.id,
     })
   );
 }
 
-function updateUserProfile(data: any) {
+function updateUserProfile(data: {
+  id: number;
+  firstName: string;
+  lastName: string;
+  role: string;
+  email: string;
+  password: string;
+}) {
   return axios.put(
     `/users/${data.id}`,
     (data = {
@@ -45,6 +60,7 @@ function updateUserProfile(data: any) {
       role: data.role,
       email: data.email,
       password: data.password,
+      id: data.id,
     })
   );
 }

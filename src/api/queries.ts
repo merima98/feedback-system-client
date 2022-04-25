@@ -16,11 +16,16 @@ function getSingleFeedback(feedbackId: number) {
   return axios.get(`/feedbacks/${feedbackId}`);
 }
 
+function latestFeedback() {
+  return axios.get("/feedbacks?_expand=user&_sort=createdAt&_order=desc");
+}
+
 const exports = {
   getAllFeedback,
   getUserById,
   getAllUsers,
   getSingleFeedback,
+  latestFeedback,
 };
 
 export default exports;
