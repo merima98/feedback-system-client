@@ -20,6 +20,7 @@ const nonLoggedUserPages = [
   { path: "/", content: "Register" },
   { path: "/login", content: "Login" },
   { path: "/feedback", content: "Feedback" },
+  { path: "/newest", content: "The newest" },
 ];
 
 const loggedUserPages = [

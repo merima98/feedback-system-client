@@ -1,5 +1,6 @@
 import FeedbackDetails from "../components/feedback/feedbackDetails/FeedbackDetails";
 import FeedbackList from "../components/feedback/feedbackList/FeedbackList";
+import LatestFeedbackList from "../components/feedback/latestFeedbackList/LatestFeedbackList";
 import SingleFeedbackCommentDetails from "../components/feedback/singleFeedback/SingleFeedbackCommentDetails";
 import Login from "../components/login/Login";
 import Register from "../components/register/Register";
@@ -26,6 +27,10 @@ const NON_LOGGED_IN_USER_ROUTES = [
     path: "/feedback-details/:id",
     element: SingleFeedbackCommentDetails,
   },
+  {
+    path: "/newest",
+    element: LatestFeedbackList,
+  },
 ];
 
 const LOGGED_IN_USER_ROUTES = [
@@ -35,7 +40,7 @@ const LOGGED_IN_USER_ROUTES = [
   },
   {
     path: "/newest",
-    element: FeedbackList,
+    element: LatestFeedbackList,
   },
   {
     path: "/feedback/:id",

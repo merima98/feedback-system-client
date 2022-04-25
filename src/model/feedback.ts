@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export type Feedback = {
   id: number;
   userId: number;
@@ -5,4 +7,5 @@ export type Feedback = {
   updatedAt: string;
   createdAt: string;
   content: string;
+  user: User;
 };

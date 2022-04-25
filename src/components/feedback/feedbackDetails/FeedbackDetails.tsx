@@ -59,6 +59,7 @@ const FeedbackDetails = () => {
         {data?.data.feedbacks?.map((feedback: Feedback) => {
           return (
             <SingleFeedbackComment
+              user={feedback.user}
               key={feedback.id}
               content={feedback.content}
               createdAt={feedback.createdAt}
