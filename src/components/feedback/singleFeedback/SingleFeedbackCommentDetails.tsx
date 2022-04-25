@@ -65,7 +65,7 @@ const SingleFeedbackCommentDetails = () => {
       content: values.content,
       updatedAt: new Date(),
       createdAt: data?.data.createdAt,
-      id: data?.data.id,
+      id: Number(data?.data.id),
     };
     updateFeedback.mutate(updateFeedbackData);
     setDrawerOpen({ ...drawerOpen, right: false });
