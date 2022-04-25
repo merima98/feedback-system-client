@@ -5,6 +5,18 @@ type Auth = {
   setIsLoggedIn: (value: boolean, userId: string, token?: string) => void;
   setLoggedOut: (value: boolean) => void;
 };
+type Theme = {
+  isDarkMode: boolean;
+  setIsDarkMode: (value: boolean) => void;
+};
+
+const useDarkMode = create<Theme>((set: SetState<Theme>) => ({
+  isDarkMode: window.localStorage.getItem("darkMode") === "dark" ? true : false,
+  setIsDarkMode: (value: boolean) => {
+    window.localStorage.setItem("darkMode", value === true ? "dark" : "light");
+    return set({ isDarkMode: value });
+  },
+}));
 
 const useAuth = create<Auth>((set: SetState<Auth>) => ({
   isLoggedIn: Boolean(window.localStorage.getItem("token")) || false,
@@ -24,4 +36,4 @@ const useAuth = create<Auth>((set: SetState<Auth>) => ({
   },
 }));
 
-export { useAuth };
+export { useAuth, useDarkMode };
