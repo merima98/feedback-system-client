@@ -70,6 +70,7 @@ const Register = () => {
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="First name"
+              cy-test="cy-test-first-name"
               size="small"
               {...register("firstName", {
                 required: "First name is required field!",
@@ -88,6 +89,7 @@ const Register = () => {
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="Last name"
+              cy-test="cy-test-last-name"
               size="small"
               {...register("lastName", {
                 required: "Last name is required field!",
@@ -107,6 +109,7 @@ const Register = () => {
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="Email"
+              cy-test="cy-test-register-email"
               size="small"
               type={"email"}
               {...register("email", {
@@ -122,6 +125,7 @@ const Register = () => {
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="Password"
+              cy-test="cy-test-register-password"
               type={"password"}
               size="small"
               autoComplete="password"
@@ -142,6 +146,7 @@ const Register = () => {
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="Your role"
+              cy-test="cy-test-register-role"
               size="medium"
               autoComplete="role"
               {...register("role", {
@@ -158,7 +163,12 @@ const Register = () => {
               </StyledErrorMessage>
             )}
           </FormControl>
-          <Button size="small" type="submit" data-testid="test-register-button">
+          <Button
+            size="small"
+            type="submit"
+            data-testid="test-register-button"
+            cy-test="cy-test-register-button"
+          >
             Reigster
           </Button>
           <Box sx={{ textAlign: "center", mb: 2 }}>
