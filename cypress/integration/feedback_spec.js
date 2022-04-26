@@ -1,8 +1,9 @@
 describe("Should test feedback.", () => {
   beforeEach(() => {
-    console.log("I am here in before");
     cy.visit("/login");
-    cy.get('[cy-test="cy-test-login-email"]').type("admin@gmail.com");
+    cy.get('[cy-test="cy-test-login-email"]').type(
+      "john.doe0.5541407036544952@test.com"
+    );
     cy.get('[cy-test="cy-test-login-password"]').type("admin");
     cy.get('[cy-test="cy-test-login-button"]').click();
   });
