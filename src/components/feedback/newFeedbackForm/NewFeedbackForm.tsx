@@ -58,7 +58,7 @@ const NewFeedbackForm = (props: { reporterId: number; userId: number }) => {
   }
 
   return (
-    <Box sx={{ mb: 2 }}>
+    <Box sx={{ mb: 2 }} data-testid="test-new-feedback-form">
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <FormControl>
