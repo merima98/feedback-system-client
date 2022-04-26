@@ -26,6 +26,7 @@ function App() {
       <Paper
         style={{
           height: "auto",
+          minHeight: "100vh",
           boxShadow: "none",
           display: "flex",
           flexDirection: "column",
