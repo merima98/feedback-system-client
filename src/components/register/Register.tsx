@@ -72,7 +72,7 @@ const Register = () => {
               label="First name"
               size="small"
               {...register("firstName", {
-                required: "First name is required field",
+                required: "First name is required field!",
                 minLength: {
                   value: 2,
                   message: "First name must have at least two characters!",
@@ -93,7 +93,7 @@ const Register = () => {
                 required: "Last name is required field!",
                 minLength: {
                   value: 2,
-                  message: "Last name must have at least two characters",
+                  message: "Last name must have at least two characters!",
                 },
               })}
             />
@@ -158,7 +158,7 @@ const Register = () => {
               </StyledErrorMessage>
             )}
           </FormControl>
-          <Button size="small" type="submit">
+          <Button size="small" type="submit" data-testid="test-register-button">
             Reigster
           </Button>
           <Box sx={{ textAlign: "center", mb: 2 }}>
