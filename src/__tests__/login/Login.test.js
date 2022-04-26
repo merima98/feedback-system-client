@@ -3,7 +3,7 @@ import { QueryClientProvider, QueryClient } from "react-query";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter as Router } from "react-router-dom";
 
-import Login from "../components/login/Login";
+import Login from "../../components/login/Login";
 
 describe("Should test Login component.", () => {
   const queryClient = new QueryClient();
