@@ -105,7 +105,7 @@ const Login = () => {
               </StyledErrorMessage>
             )}
           </FormControl>
-          <Button size="small" type="submit">
+          <Button size="small" type="submit" data-testid="login-submit-button">
             Login
           </Button>
           <Box sx={{ textAlign: "center", mb: 2 }}>
