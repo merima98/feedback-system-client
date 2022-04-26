@@ -3,7 +3,6 @@ import { useQuery } from "react-query";
 
 import queries from "../../../api/queries";
 import { Feedback } from "../../../model/feedback";
-
 import SingleLatestFeedback from "../singleLatestFeedback/SingleLatestFeedback";
 
 const LatestFeedbackList = () => {
