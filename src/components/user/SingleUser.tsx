@@ -42,11 +42,10 @@ const SingleUser = () => {
     const updateUserdata = {
       firstName: values.firstName,
       lastName: values.lastName,
-      email: data?.data.email,
-      password: data?.data.password,
       role: values.role,
       id: data?.data.id,
     };
+
     updateUserProfile.mutate(updateUserdata);
     setDrawerOpen({ ...drawerOpen, right: false });
   }
