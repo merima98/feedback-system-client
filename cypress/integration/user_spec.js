@@ -2,7 +2,7 @@ describe("Should test user's component.", () => {
   beforeEach(() => {
     cy.visit("/login");
     cy.get('[cy-test="cy-test-login-email"]').type(
-      "john.doe0.5541407036544952@test.com"
+      "john.doe0.04853710562128488@test.com"
     );
     cy.get('[cy-test="cy-test-login-password"]').type("admin");
     cy.get('[cy-test="cy-test-login-button"]').click();
@@ -17,7 +17,10 @@ describe("Should test user's component.", () => {
 
     cy.get('[cy-test="cy-test-edit-profile-button"]').click();
 
-    cy.get('[cy-test="cy-test-edit-user-profile-firstName"]').type("Changing");
+    cy.get('[cy-test="cy-test-edit-user-profile-firstName"]').clear();
+    cy.get('[cy-test="cy-test-edit-user-profile-firstName"]').type(
+      `John ${Math.random()}`
+    );
     cy.get('[cy-test="cy-test-edit-user-profile-update-button"]').click();
   });
 });

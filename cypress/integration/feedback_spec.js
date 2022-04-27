@@ -2,7 +2,7 @@ describe("Should test feedback.", () => {
   beforeEach(() => {
     cy.visit("/login");
     cy.get('[cy-test="cy-test-login-email"]').type(
-      "john.doe0.5541407036544952@test.com"
+      "john.doe0.04853710562128488@test.com"
     );
     cy.get('[cy-test="cy-test-login-password"]').type("admin");
     cy.get('[cy-test="cy-test-login-button"]').click();
