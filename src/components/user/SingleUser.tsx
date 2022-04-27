@@ -42,11 +42,10 @@ const SingleUser = () => {
     const updateUserdata = {
       firstName: values.firstName,
       lastName: values.lastName,
-      email: data?.data.email,
-      password: data?.data.password,
       role: values.role,
       id: data?.data.id,
     };
+
     updateUserProfile.mutate(updateUserdata);
     setDrawerOpen({ ...drawerOpen, right: false });
   }
@@ -88,6 +87,7 @@ const SingleUser = () => {
                 mb: 2,
               }}
               label="First name"
+              cy-test="cy-test-edit-user-profile-firstName"
               size="small"
               defaultValue={data?.data.firstName}
               {...register("firstName", {
@@ -142,7 +142,11 @@ const SingleUser = () => {
               </StyledErrorMessage>
             )}
           </FormControl>
-          <Button type="submit" variant="contained">
+          <Button
+            type="submit"
+            variant="contained"
+            cy-test="cy-test-edit-user-profile-update-button"
+          >
             Update your profile
           </Button>
         </Box>
@@ -202,6 +206,7 @@ const SingleUser = () => {
         <Fragment key={"right"}>
           <Button
             variant="contained"
+            cy-test="cy-test-edit-profile-button"
             size="small"
             onClick={toggleDrawer("right", true)}
           >

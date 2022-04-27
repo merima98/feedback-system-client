@@ -40,7 +40,7 @@ const Login = () => {
     onSuccess: (data) => {
       setOpen(false);
       setIsLoggedIn(true, data.data.user.id, data.data.accessToken);
-      navigation("/newest");
+      navigation("/");
     },
     onError: (error: ErrorOption) => {
       setError("email", error, { shouldFocus: true });
@@ -75,6 +75,7 @@ const Login = () => {
               label="Email"
               size="small"
               type={"email"}
+              cy-test="cy-test-login-email"
               {...register("email", {
                 required: "Email is required field!",
               })}
@@ -88,6 +89,7 @@ const Login = () => {
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="Password"
+              cy-test="cy-test-login-password"
               type={"password"}
               size="small"
               autoComplete="password"
@@ -105,7 +107,12 @@ const Login = () => {
               </StyledErrorMessage>
             )}
           </FormControl>
-          <Button size="small" type="submit" data-testid="login-submit-button">
+          <Button
+            size="small"
+            type="submit"
+            data-testid="login-submit-button"
+            cy-test="cy-test-login-button"
+          >
             Login
           </Button>
           <Box sx={{ textAlign: "center", mb: 2 }}>

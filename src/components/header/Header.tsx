@@ -260,7 +260,7 @@ const Header = () => {
                   {page.content}
                 </Button>
               ))}
-              <Button onClick={toggleDarkMode}>
+              <Button onClick={toggleDarkMode} cy-test="cy-test-mode-button">
                 {isDarkMode ? <Moon color="white" /> : <Sun color="white" />}
               </Button>
             </Box>

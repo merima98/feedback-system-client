@@ -49,20 +49,8 @@ function updateUserProfile(data: {
   firstName: string;
   lastName: string;
   role: string;
-  email: string;
-  password: string;
 }) {
-  return axios.put(
-    `/users/${data.id}`,
-    (data = {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      role: data.role,
-      email: data.email,
-      password: data.password,
-      id: data.id,
-    })
-  );
+  return axios.patch(`/users/${data.id}`, data);
 }
 
 const exports = {

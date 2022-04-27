@@ -78,6 +78,7 @@ const NewFeedbackForm = (props: { reporterId: number; userId: number }) => {
                 },
               })}
               placeholder="Write feedback here..."
+              cy-test="cy-test-new-feedback"
             />
             {errors.content && (
               <StyledErrorMessage sx={{ fontSize: 12, mb: 2 }}>
@@ -85,7 +86,9 @@ const NewFeedbackForm = (props: { reporterId: number; userId: number }) => {
               </StyledErrorMessage>
             )}
           </FormControl>
-          <Button type="submit">Leave a feedback</Button>
+          <Button type="submit" cy-test="cy-test-leave-feedback-button">
+            Leave a feedback
+          </Button>
         </Box>
       </form>
       <>
