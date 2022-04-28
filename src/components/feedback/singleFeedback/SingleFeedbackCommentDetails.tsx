@@ -107,6 +107,7 @@ const SingleFeedbackCommentDetails = () => {
                 mb: 2,
               }}
               placeholder="Write feedback here..."
+              defaultValue={data?.data.content}
               size="medium"
               {...register("content", {
                 required: "Feedback is required field!",

@@ -5,7 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import { Menu as MenuIcon } from "react-feather";
+import { Menu as MenuIcon, Moon, Sun } from "react-feather";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { User } from "react-feather";
 
 import { StyledLink, StyledMyProfileLink } from "./HeaderStyles";
-import { useAuth } from "../../state";
+import { useAuth, useDarkMode } from "../../state";
 
 const nonLoggedUserPages = [
   { path: "/", content: "Register" },
@@ -30,6 +30,8 @@ const loggedUserPages = [
 
 const Header = () => {
   const isLoggedIn = useAuth((state) => state.isLoggedIn);
+  const isDarkMode = useDarkMode((state) => state.isDarkMode);
+  const setdarkMode = useDarkMode((state) => state.setIsDarkMode);
   const setLoggedOut = useAuth((state) => state.setLoggedOut);
   const navigation = useNavigate();
 
@@ -62,6 +64,9 @@ const Header = () => {
     navigation("/");
   };
 
+  const toggleDarkMode = () => {
+    setdarkMode(!isDarkMode);
+  };
   return (
     <AppBar position="static">
       {isLoggedIn ? (
@@ -115,6 +120,9 @@ const Header = () => {
                     <Typography textAlign="center">{page.content}</Typography>
                   </MenuItem>
                 ))}
+                <MenuItem onClick={toggleDarkMode}>
+                  {isDarkMode ? <Moon color="white" /> : <Sun color="black" />}
+                </MenuItem>
               </Menu>
             </Box>
             <Typography
@@ -137,6 +145,9 @@ const Header = () => {
                   {page.content}
                 </Button>
               ))}
+              <Button onClick={toggleDarkMode}>
+                {isDarkMode ? <Moon color="white" /> : <Sun color="white" />}
+              </Button>
             </Box>
 
             <Box sx={{ flexGrow: 0, cursor: "pointer" }}>
@@ -224,6 +235,9 @@ const Header = () => {
                     <Typography textAlign="center">{page.content}</Typography>
                   </MenuItem>
                 ))}
+                <MenuItem onClick={toggleDarkMode}>
+                  {isDarkMode ? <Moon color="white" /> : <Sun color="black" />}
+                </MenuItem>
               </Menu>
             </Box>
             <Typography
@@ -246,6 +260,9 @@ const Header = () => {
                   {page.content}
                 </Button>
               ))}
+              <Button onClick={toggleDarkMode} cy-test="cy-test-mode-button">
+                {isDarkMode ? <Moon color="white" /> : <Sun color="white" />}
+              </Button>
             </Box>
           </Toolbar>
         </Container>

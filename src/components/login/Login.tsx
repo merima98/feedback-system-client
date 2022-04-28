@@ -6,6 +6,7 @@ import {
   TextField,
   LinearProgress,
   Snackbar,
+  InputAdornment,
 } from "@mui/material";
 import { ErrorOption, FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +17,7 @@ import { forwardRef, useState } from "react";
 import { StyledErrorMessage, StyledLink } from "./LoginStyle";
 import mutations from "../../api/mutations";
 import { useAuth } from "../../state";
+import { Eye, EyeOff } from "react-feather";
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -35,12 +37,13 @@ const Login = () => {
   const navigation = useNavigate();
   const setIsLoggedIn = useAuth((state) => state.setIsLoggedIn);
   const [open, setOpen] = useState(false);
+  const [isVisible, setVisibility] = useState(false);
 
   const loginMutation = useMutation(mutations.login, {
     onSuccess: (data) => {
       setOpen(false);
       setIsLoggedIn(true, data.data.user.id, data.data.accessToken);
-      navigation("/newest");
+      navigation("/");
     },
     onError: (error: ErrorOption) => {
       setError("email", error, { shouldFocus: true });
@@ -54,6 +57,10 @@ const Login = () => {
 
   const handleOnClose = () => {
     setOpen(false);
+  };
+
+  const handlePasswordVisibility = () => {
+    setVisibility(!isVisible);
   };
 
   return (
@@ -75,6 +82,7 @@ const Login = () => {
               label="Email"
               size="small"
               type={"email"}
+              cy-test="cy-test-login-email"
               {...register("email", {
                 required: "Email is required field!",
               })}
@@ -88,8 +96,26 @@ const Login = () => {
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="Password"
-              type={"password"}
+              cy-test="cy-test-login-password"
+              type={isVisible ? "text" : "password"}
               size="small"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end" sx={{ paddingRight: "0px" }}>
+                    {isVisible ? (
+                      <EyeOff
+                        style={{ cursor: "pointer", color: "#2196f3" }}
+                        onClick={handlePasswordVisibility}
+                      />
+                    ) : (
+                      <Eye
+                        style={{ cursor: "pointer", color: "#2196f3" }}
+                        onClick={handlePasswordVisibility}
+                      />
+                    )}
+                  </InputAdornment>
+                ),
+              }}
               autoComplete="password"
               {...register("password", {
                 required: "Password is required field!",
@@ -105,7 +131,12 @@ const Login = () => {
               </StyledErrorMessage>
             )}
           </FormControl>
-          <Button size="small" type="submit">
+          <Button
+            size="small"
+            type="submit"
+            data-testid="login-submit-button"
+            cy-test="cy-test-login-button"
+          >
             Login
           </Button>
           <Box sx={{ textAlign: "center", mb: 2 }}>

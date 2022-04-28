@@ -5,6 +5,7 @@ import {
   TextField,
   LinearProgress,
   Snackbar,
+  InputAdornment,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { ErrorOption, FieldValues, useForm } from "react-hook-form";
@@ -16,6 +17,7 @@ import { forwardRef, useState } from "react";
 import { StyledErrorMessage, StyledLink } from "./RegisterStyle";
 import mutations from "../../api/mutations";
 import { useAuth } from "../../state";
+import { Eye, EyeOff } from "react-feather";
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alet(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -31,6 +33,7 @@ const Register = () => {
 
   const navigation = useNavigate();
   const setIsLoggedIn = useAuth((state) => state.setIsLoggedIn);
+  const [isVisible, setVisibility] = useState(false);
   const [open, setOpen] = useState(false);
 
   const registerMutation = useMutation(mutations.register, {
@@ -53,6 +56,10 @@ const Register = () => {
     setOpen(false);
   };
 
+  const handlePasswordVisibility = () => {
+    setVisibility(!isVisible);
+  };
+
   return (
     <Container maxWidth="sm">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -70,9 +77,10 @@ const Register = () => {
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="First name"
+              cy-test="cy-test-first-name"
               size="small"
               {...register("firstName", {
-                required: "First name is required field",
+                required: "First name is required field!",
                 minLength: {
                   value: 2,
                   message: "First name must have at least two characters!",
@@ -88,12 +96,13 @@ const Register = () => {
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="Last name"
+              cy-test="cy-test-last-name"
               size="small"
               {...register("lastName", {
                 required: "Last name is required field!",
                 minLength: {
                   value: 2,
-                  message: "Last name must have at least two characters",
+                  message: "Last name must have at least two characters!",
                 },
               })}
             />
@@ -107,6 +116,7 @@ const Register = () => {
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="Email"
+              cy-test="cy-test-register-email"
               size="small"
               type={"email"}
               {...register("email", {
@@ -122,7 +132,25 @@ const Register = () => {
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="Password"
-              type={"password"}
+              cy-test="cy-test-register-password"
+              type={isVisible ? "text" : "password"}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end" sx={{ paddingRight: "0px" }}>
+                    {isVisible ? (
+                      <EyeOff
+                        style={{ cursor: "pointer", color: "#2196f3" }}
+                        onClick={handlePasswordVisibility}
+                      />
+                    ) : (
+                      <Eye
+                        style={{ cursor: "pointer", color: "#2196f3" }}
+                        onClick={handlePasswordVisibility}
+                      />
+                    )}
+                  </InputAdornment>
+                ),
+              }}
               size="small"
               autoComplete="password"
               {...register("password", {
@@ -142,6 +170,7 @@ const Register = () => {
           <FormControl sx={{ mb: 2 }}>
             <TextField
               label="Your role"
+              cy-test="cy-test-register-role"
               size="medium"
               autoComplete="role"
               {...register("role", {
@@ -158,7 +187,12 @@ const Register = () => {
               </StyledErrorMessage>
             )}
           </FormControl>
-          <Button size="small" type="submit">
+          <Button
+            size="small"
+            type="submit"
+            data-testid="test-register-button"
+            cy-test="cy-test-register-button"
+          >
             Reigster
           </Button>
           <Box sx={{ textAlign: "center", mb: 2 }}>
