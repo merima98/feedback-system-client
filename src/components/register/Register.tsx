@@ -5,6 +5,7 @@ import {
   TextField,
   LinearProgress,
   Snackbar,
+  InputAdornment,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { ErrorOption, FieldValues, useForm } from "react-hook-form";
@@ -16,6 +17,7 @@ import { forwardRef, useState } from "react";
 import { StyledErrorMessage, StyledLink } from "./RegisterStyle";
 import mutations from "../../api/mutations";
 import { useAuth } from "../../state";
+import { Eye, EyeOff } from "react-feather";
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alet(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -31,6 +33,7 @@ const Register = () => {
 
   const navigation = useNavigate();
   const setIsLoggedIn = useAuth((state) => state.setIsLoggedIn);
+  const [isVisible, setVisibility] = useState(false);
   const [open, setOpen] = useState(false);
 
   const registerMutation = useMutation(mutations.register, {
@@ -51,6 +54,10 @@ const Register = () => {
 
   const handleOnClose = () => {
     setOpen(false);
+  };
+
+  const handlePasswordVisibility = () => {
+    setVisibility(!isVisible);
   };
 
   return (
@@ -126,7 +133,24 @@ const Register = () => {
             <TextField
               label="Password"
               cy-test="cy-test-register-password"
-              type={"password"}
+              type={isVisible ? "text" : "password"}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end" sx={{ paddingRight: "0px" }}>
+                    {isVisible ? (
+                      <EyeOff
+                        style={{ cursor: "pointer", color: "#2196f3" }}
+                        onClick={handlePasswordVisibility}
+                      />
+                    ) : (
+                      <Eye
+                        style={{ cursor: "pointer", color: "#2196f3" }}
+                        onClick={handlePasswordVisibility}
+                      />
+                    )}
+                  </InputAdornment>
+                ),
+              }}
               size="small"
               autoComplete="password"
               {...register("password", {
