@@ -133,7 +133,7 @@ const Register = () => {
             <TextField
               label="Password"
               cy-test="cy-test-register-password"
-              type={"password"}
+              type={isVisible ? "text" : "password"}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end" sx={{ paddingRight: "0px" }}>
